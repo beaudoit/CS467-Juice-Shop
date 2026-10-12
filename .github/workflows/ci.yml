@@ -388,19 +388,3 @@ jobs:
           heroku_app_name: ${{ env.HEROKU_APP }}
           heroku_email: bjoern.kimminich@owasp.org
           branch: ${{ env.HEROKU_BRANCH }}
-  notify-slack:
-    if: github.repository == 'juice-shop/juice-shop' && github.event_name == 'push' && (success() || failure())
-    needs:
-      - docker
-      - heroku
-      - lint
-      - coding-challenge-rsn
-      - smoke-test
-      - coverage-report
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Slack workflow notification"
-        uses: Gamesight/slack-workflow-status@68bf00d0dbdbcb206c278399aa1ef6c14f74347a #v1.3.0
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
