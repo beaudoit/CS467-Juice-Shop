@@ -10,6 +10,10 @@ This guide explains how to run both project branches using Docker for local vali
 - **insecure** – Intentionally vulnerable version used for pentesting and vulnerability validation.
 - **main** – Remediated version used for implementing and testing security fixes.
 
+### Branching Rule
+
+All remediation work must be done on a separate feature branch created from `main`. Do not edit or commit directly to `main`. Once a fix is validated, open a pull request from the feature branch into `main` for review and merge.
+
 ### Current Docker Workflow
 
 For the main branch, build and run from the project root of `juice-shop-main`:
@@ -107,7 +111,7 @@ http://localhost:3000
 
 # Main Branch Setup
 
-The `main` branch is where all remediation work takes place.
+The repository’s `main` branch is the protected base branch for remediation work. Contributors should create a feature branch from `main` before making changes.
 
 ## Switch to Main
 
@@ -223,7 +227,7 @@ and verify the fix. If the expected UI change is not visible, stop and restart t
 
 # Typical Development Workflow
 
-## Create a Feature Branch
+## Create a Feature Branch Based on Main
 
 ```powershell
 git checkout main
@@ -243,7 +247,7 @@ git checkout -b fix-xxe
 
 ## Make Changes
 
-Edit the code in VS Code.
+Edit the code in VS Code on the feature branch.
 
 ## Test Changes
 
@@ -279,7 +283,7 @@ Submit a Pull Request:
 feature branch → main
 ```
 
-Do not merge directly into `main`.
+Do not merge directly into `main`. The protected workflow is: create branch → validate fix → open PR → review → merge.
 
 ---
 
@@ -339,7 +343,7 @@ docker rm -f juice-insecure
 
 ✅ Use `insecure` only for pentesting and vulnerability validation.
 
-✅ Use feature branches for all vulnerability fixes.
+✅ Create a separate feature branch from `main` for every fix or enhancement.
 
 ✅ Submit Pull Requests into `main`.
 
@@ -349,9 +353,11 @@ docker rm -f juice-insecure
 
 ❌ Do not modify the `insecure` branch.
 
-❌ Do not commit directly to `main`.
+❌ Do not edit or commit directly to `main`.
 
 ❌ Do not merge untested code.
+
+❌ Do not bypass the pull request process for branch-based fixes.
 
 ---
 
