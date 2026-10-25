@@ -21,7 +21,7 @@ For the main branch, build and run from the project root of `juice-shop-main`:
 ```powershell
 cd juice-shop-main
 docker build -t juice-main-dev .
-docker compose up -d --force-recreate
+docker compose up -d
 ```
 
 The app is exposed on:
@@ -29,6 +29,25 @@ The app is exposed on:
 ```text
 http://localhost:3001
 ```
+
+The Docker Compose file defaults to safe mode and binds the app to localhost only:
+
+```yaml
+services:
+  juice-main:
+    image: juice-main-dev
+    container_name: juice-main
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+    ports:
+      - "127.0.0.1:3001:3000"
+```
+
+This means:
+
+- Safe mode is the default (`NODE_ENV=production`)
+- Unsafe mode is enabled by setting `NODE_ENV=unsafe` before startup
+- The container is bound to `127.0.0.1`, so other devices on the network cannot access it
 
 After making a UI or frontend change, rebuild the image and recreate the container so the new version is served. A hard refresh in the browser may be required to load the latest build.
 
@@ -144,22 +163,57 @@ docker build -t juice-main-dev .
 
 The repository already contains the required `docker-compose.yml`.
 
-Run:
+### Safe mode (default)
 
 ```powershell
-docker compose up -d --force-recreate
+docker compose up -d
 ```
 
-Verify:
+### Unsafe mode
 
 ```powershell
+$env:NODE_ENV = "unsafe"
+docker compose down
+docker compose up -d
+```
+
+### Switch back to safe mode
+
+```powershell
+Remove-Item Env:NODE_ENV
+docker compose down
+docker compose up -d
+```
+
+### Verify the mode and port binding
+
+```powershell
+docker exec -it juice-main printenv NODE_ENV
 docker ps
 ```
 
-Look for:
+Expected values:
 
 ```text
-juice-main
+production
+```
+
+or
+
+```text
+unsafe
+```
+
+and the port binding should look like this:
+
+```text
+127.0.0.1:3001->3000/tcp
+```
+
+not:
+
+```text
+0.0.0.0:3001->3000/tcp
 ```
 
 ## Access
@@ -363,11 +417,36 @@ docker rm -f juice-insecure
 
 # Quick Reference
 
-## Start Main
+## Start Main in Safe Mode
 
 ```powershell
 docker compose up -d
 ```
+
+## Start Main in Unsafe Mode
+
+```powershell
+$env:NODE_ENV = "unsafe"
+docker compose down
+docker compose up -d
+```
+
+## Switch Back to Safe Mode
+
+```powershell
+Remove-Item Env:NODE_ENV
+docker compose down
+docker compose up -d
+```
+
+## Verify Startup Mode
+
+```powershell
+docker exec -it juice-main printenv NODE_ENV
+docker ps
+```
+
+Expected output includes either `production` or `unsafe`, and the port binding should be `127.0.0.1:3001->3000/tcp`.
 
 ## Rebuild and Retest Main
 
