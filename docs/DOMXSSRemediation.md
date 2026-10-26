@@ -36,6 +36,8 @@ I removed the original code that bypassed the sanitizer:
 and replaced it with just the parameter:
 ![Fixed Code](fixedCode.png)
 
+Commit: https://github.com/beaudoit/CS467-Juice-Shop/commit/bfc08d822
+
 
 ## Verification of the fix
 
