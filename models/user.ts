@@ -70,7 +70,7 @@ const UserModelInit = (sequelize: Sequelize) => { // vuln-code-snippet start wea
       password: {
         type: DataTypes.STRING,
         set (clearTextPassword: string) {
-          this.setDataValue('password', security.hash(clearTextPassword)) // vuln-code-snippet vuln-line weakPasswordChallenge
+          this.setDataValue('password', security.hashArgon2(clearTextPassword)) // vuln-code-snippet vuln-line weakPasswordChallenge
         }
       }, // vuln-code-snippet end weakPasswordChallenge
       role: {
@@ -121,6 +121,12 @@ const UserModelInit = (sequelize: Sequelize) => { // vuln-code-snippet start wea
       sequelize
     }
   )
+
+  User.addHook('beforeValidate', async (user: User) => {
+    if (user.password && !user.password.startsWith('$argon2id$')) {
+      user.password = await security.hashArgon2(user.password)
+    }
+  })
 
   User.addHook('afterValidate', async (user: User) => {
     if (

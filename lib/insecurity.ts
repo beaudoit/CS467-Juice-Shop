@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import argon2 from 'argon2'  // Added argon2 package to replace MD5 hashing of passwords
 import fs from 'node:fs'
 import crypto from 'node:crypto'
 import { type Request, type Response, type NextFunction } from 'express'
@@ -38,7 +39,23 @@ interface IAuthenticatedUsers {
   updateFrom: (req: Request, user: ResponseWithUser) => any
 }
 
-export const hash = (data: string) => crypto.createHash('md5').update(data).digest('hex')
+// Maintaining the legacy MD5 hashing helper for existing user accounts
+export const hashMD5 = (data: string) => crypto.createHash('md5').update(data).digest('hex')
+
+// Replaced the MD5 hashing helper with a Argon2id hashing helper
+// based on OWASP's recommendations: 19 MiB memory, iteration count of 2, 1 degree of parallelism
+export const hashArgon2 = async (data: string) =>
+  argon2.hash(data, {
+    type: argon2.argon2id,
+    memoryCost: 19 * 1024, // 19 MiB in Kib
+    timeCost: 2,
+    parallelism: 1
+  })
+  
+// Added a hash verification helper since Argon2id needs to extract the salt to recompute the hash
+export const verifyHashArgon2 = async (hash: string, data: string) => 
+  argon2.verify(hash, data)
+
 export const hmac = (data: string) => crypto.createHmac('sha256', 'pa4qacea4VK9t9nGv7yZtwmj').update(data).digest('hex')
 
 export const cutOffPoisonNullByte = (str: string) => {
