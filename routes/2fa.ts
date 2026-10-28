@@ -105,7 +105,7 @@ export async function setup (req: Request, res: Response) {
     const { password, setupToken, initialToken } = req.body
 
     if ((user.password !== security.hashMD5(password)) &&
-      !(await security.verifyHashArgon2(user.password, password)) 
+      !(await security.verifyHashArgon2(user.password, password))
     ) {
       throw new Error('Password doesnt match stored password')
     }
@@ -152,7 +152,7 @@ export async function disable (req: Request, res: Response) {
     const { password } = req.body
 
     if ((user.password !== security.hashMD5(password)) &&
-      !(await security.verifyHashArgon2(user.password, password)) 
+      !(await security.verifyHashArgon2(user.password, password))
     ) {
       throw new Error('Password doesnt match stored password')
     }

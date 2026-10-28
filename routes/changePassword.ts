@@ -36,7 +36,7 @@ export function changePassword () {
       return
     }
 
-    if (currentPassword && 
+    if (currentPassword &&
       security.hashMD5(currentPassword) !== loggedInUser.data.password &&
       !(await security.verifyHashArgon2(loggedInUser.data.password, currentPassword))
     ) {

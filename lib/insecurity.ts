@@ -51,9 +51,9 @@ export const hashArgon2 = async (data: string) =>
     timeCost: 2,
     parallelism: 1
   })
-  
+
 // Added a hash verification helper since Argon2id needs to extract the salt to recompute the hash
-export const verifyHashArgon2 = async (hash: string, data: string) => 
+export const verifyHashArgon2 = async (hash: string, data: string) =>
   argon2.verify(hash, data)
 
 export const hmac = (data: string) => crypto.createHmac('sha256', 'pa4qacea4VK9t9nGv7yZtwmj').update(data).digest('hex')
