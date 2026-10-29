@@ -28,7 +28,7 @@ export function retrieveLoggedInUser () {
           // When fields are specified, return only those fields
           for (const field of requestedFields) {
             if ((user?.data[field as keyof typeof user.data] !== undefined) &&
-                // Allow list so only select fields can be returned via whoami API call 
+                // Allow list so only select fields can be returned via whoami API call
                 // (preventing sensitive data like password from being leaked)
                 (['id', 'email', 'lastLoginIp', 'profileImage'].includes(field))) {
               baseUser[field] = user?.data[field as keyof typeof user.data]
