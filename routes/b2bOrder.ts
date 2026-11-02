@@ -38,7 +38,7 @@ export function b2bOrder () {
   }
 
   function uniqueOrderNumber () {
-    return security.hash(`${(new Date()).toString()}_B2B`)
+    return security.hashMD5(`${(new Date()).toString()}_B2B`)
   }
 
   function dateTwoWeeksFromNow () {
