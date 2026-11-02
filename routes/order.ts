@@ -37,7 +37,7 @@ export function placeOrder () {
         if (basket != null) {
           const customer = security.authenticatedUsers.from(req)
           const email = customer ? customer.data ? customer.data.email : '' : ''
-          const orderId = security.hash(email).slice(0, 4) + '-' + utils.randomHexString(16)
+          const orderId = security.hashMD5(email).slice(0, 4) + '-' + utils.randomHexString(16)
           const pdfFile = `order_${orderId}.pdf`
           const { default: PDFDocument } = await import('pdfkit')
           const doc = new PDFDocument()
