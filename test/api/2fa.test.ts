@@ -320,7 +320,7 @@ void describe('/rest/2fa/setup', () => {
       data: {
         id: 999,
         email,
-        password: security.hash(password),
+        password: security.hashMD5(password),
         totpSecret: ''
       }
     })
@@ -408,7 +408,7 @@ void describe('/rest/2fa/disable', () => {
       data: {
         id: 998,
         email,
-        password: security.hash(password),
+        password: security.hashMD5(password),
         totpSecret: 'KDR5FXSOLNV6A5UAQYCKROSJZF7SVML7'
       }
     })
