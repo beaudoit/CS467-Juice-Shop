@@ -44,7 +44,7 @@ Expected Result: The application should sanitize or reject malicious HTML submit
 
 Actual Result: The vulnerable application accepts the malicious HTML and stores it as part of the user's email address.
 
-The following screenshot show the makicious iframe payload submitted through the registration request:
+The following screenshot shows the malicious iframe payload submitted through the registration request:
 ![Malicious XSS payload submitted through DevTools](StoredXSSPayload.png)
 
 The server accepted the malicious HTML and returned it in the email field:
@@ -84,7 +84,7 @@ The corrected code:
 
 ![Corrected code showing email sanitization](StoredXSSFixedCode.png)
 
-Commit: [Add commit link here]
+Commit: https://github.com/beaudoit/CS467-Juice-Shop/commit/509df7986
 
 ## Verification of the fix
 
