@@ -9,9 +9,9 @@ import request from 'supertest'
 import type { Express } from 'express'
 import { createTestApp } from './helpers/setup'
 import { login } from './helpers/auth'
-import { challenges } from '../../data/datacache'
+// import { challenges } from '../../data/datacache'
 import * as security from '../../lib/insecurity'
-import * as utils from '../../lib/utils'
+// import * as utils from '../../lib/utils'
 
 let app: Express
 let authHeader: Record<string, string>

@@ -9,7 +9,7 @@ import request from 'supertest'
 import type { Express } from 'express'
 import { createTestApp } from './helpers/setup'
 import { login } from './helpers/auth'
-import { QuantityModel } from '../../models/quantity'
+// import { QuantityModel } from '../../models/quantity'
 
 let app: Express
 let authHeader: { Authorization: string, 'content-type': string }

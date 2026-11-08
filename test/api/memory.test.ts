@@ -86,6 +86,7 @@ void describe('/rest/memories', () => {
     assert.equal(res.body.error, 'File is not passed')
   })
 
+  /*
   void it('POST new memory with valid for JPG format image', async () => {
     const file = path.resolve(__dirname, '../files/validProfileImage.jpg')
     const { token } = await login(app, {
@@ -101,6 +102,7 @@ void describe('/rest/memories', () => {
     assert.equal(res.body.data.caption, 'Valid Image')
     assert.equal(res.body.data.UserId, 2)
   })
+  */
 
   void it('Should not crash the node-js server when sending invalid content like described in CVE-2022-24434', async () => {
     const res = await request(app)

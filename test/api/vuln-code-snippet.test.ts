@@ -150,47 +150,47 @@ void describe('snippets/verdict', () => {
     assert.equal(res.status, 200)
     assert.equal(res.body.verdict, false)
   })
-})
 
-// these tests rely on sequential execution to build up the attempt count.
-void describe('snippets/verdict (hint progression for loginAdminChallenge)', () => {
-  void it('returns no hint on the first wrong attempt', async () => {
-    const res = await request(app)
-      .post('/snippets/verdict')
-      .send({ selectedLines: [999], key: 'loginAdminChallenge' })
-
-    assert.equal(res.status, 200)
-    assert.equal(res.body.verdict, false)
-    assert.equal(res.body.hint, undefined)
-  })
-
-  void it('returns the first hint text on the second wrong attempt', async () => {
-    const res = await request(app)
-      .post('/snippets/verdict')
-      .send({ selectedLines: [999], key: 'loginAdminChallenge' })
-
-    assert.equal(res.status, 200)
-    assert.equal(res.body.verdict, false)
-    assert.equal(typeof res.body.hint, 'string')
-    assert.match(res.body.hint, /Try to identify any variables/)
-  })
-
-  void it('returns a line-number hint after all text hints are exhausted', async () => {
-    // Exhaust the remaining 2 text hints (3 total, 1 already used above).
-    // getFindItAttempts must exceed hints.length (3), requiring a 5th wrong attempt.
-    for (let i = 0; i < 2; i++) {
-      await request(app)
+  // these tests rely on sequential execution to build up the attempt count.
+  void describe('snippets/verdict (hint progression for loginAdminChallenge)', () => {
+    void it('returns no hint on the first wrong attempt', async () => {
+      const res = await request(app)
         .post('/snippets/verdict')
         .send({ selectedLines: [999], key: 'loginAdminChallenge' })
-    }
 
-    const res = await request(app)
-      .post('/snippets/verdict')
-      .send({ selectedLines: [999], key: 'loginAdminChallenge' })
+      assert.equal(res.status, 200)
+      assert.equal(res.body.verdict, false)
+      assert.equal(res.body.hint, undefined)
+    })
 
-    assert.equal(res.status, 200)
-    assert.equal(res.body.verdict, false)
-    assert.match(res.body.hint, /Line 15 is responsible for this vulnerability/)
+    void it('returns the first hint text on the second wrong attempt', async () => {
+      const res = await request(app)
+        .post('/snippets/verdict')
+        .send({ selectedLines: [999], key: 'loginAdminChallenge' })
+
+      assert.equal(res.status, 200)
+      assert.equal(res.body.verdict, false)
+      assert.equal(typeof res.body.hint, 'string')
+      assert.match(res.body.hint, /Try to identify any variables/)
+    })
+
+    void it('returns a line-number hint after all text hints are exhausted', async () => {
+      // Exhaust the remaining 2 text hints (3 total, 1 already used above).
+      // getFindItAttempts must exceed hints.length (3), requiring a 5th wrong attempt.
+      for (let i = 0; i < 2; i++) {
+        await request(app)
+          .post('/snippets/verdict')
+          .send({ selectedLines: [999], key: 'loginAdminChallenge' })
+      }
+
+      const res = await request(app)
+        .post('/snippets/verdict')
+        .send({ selectedLines: [999], key: 'loginAdminChallenge' })
+
+      assert.equal(res.status, 200)
+      assert.equal(res.body.verdict, false)
+      assert.match(res.body.hint, /Line 15 is responsible for this vulnerability/)
+    })
   })
-})
   */
+})

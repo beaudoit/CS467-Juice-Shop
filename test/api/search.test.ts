@@ -8,12 +8,12 @@ import assert from 'node:assert/strict'
 import request from 'supertest'
 import type { Express } from 'express'
 import config from 'config'
-import * as security from '../../lib/insecurity'
-import type { Product as ProductConfig } from '../../lib/config.schema'
+// import * as security from '../../lib/insecurity'
+// import type { Product as ProductConfig } from '../../lib/config.schema'
 import { createTestApp } from './helpers/setup'
 
-const christmasProduct = config.get<ProductConfig[]>('products').filter(({ useForChristmasSpecialChallenge }) => useForChristmasSpecialChallenge)[0]
-const pastebinLeakProduct = config.get<ProductConfig[]>('products').filter(({ keywordsForPastebinDataLeakChallenge }) => keywordsForPastebinDataLeakChallenge)[0]
+// const christmasProduct = config.get<ProductConfig[]>('products').filter(({ useForChristmasSpecialChallenge }) => useForChristmasSpecialChallenge)[0]
+// const pastebinLeakProduct = config.get<ProductConfig[]>('products').filter(({ keywordsForPastebinDataLeakChallenge }) => keywordsForPastebinDataLeakChallenge)[0]
 
 let app: Express
 
