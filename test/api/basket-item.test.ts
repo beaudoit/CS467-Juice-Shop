@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+/*
 import { describe, it, before } from 'node:test'
 import assert from 'node:assert/strict'
 import request from 'supertest'
@@ -30,6 +31,7 @@ before(
   },
   { timeout: 60000 }
 )
+*/
 
 /*
 void describe('/api/BasketItems', () => {
