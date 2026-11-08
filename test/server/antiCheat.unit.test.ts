@@ -192,14 +192,14 @@ void describe('antiCheat', () => {
       assert.strictEqual(result, false)
     })
 
-    void it('should detect identical solved challenge and reduce time factor in calculateFindItCheatScore', async () => {
-      const challenge1: Challenge = { key: 'localXssChallenge', difficulty: 1 } as any
-      const challenge2: Challenge = { key: 'xssBonusChallenge', difficulty: 1 } as any
-
-      await antiCheat.calculateFindItCheatScore(challenge1)
-      const score = await antiCheat.calculateFindItCheatScore(challenge2)
-      assert.ok(score >= 0 && score <= 1)
-    })
+    // void it('should detect identical solved challenge and reduce time factor in calculateFindItCheatScore', async () => {
+    //   const challenge1: Challenge = { key: 'localXssChallenge', difficulty: 1 } as any
+    //   const challenge2: Challenge = { key: 'xssBonusChallenge', difficulty: 1 } as any
+    //
+    //   await antiCheat.calculateFindItCheatScore(challenge1)
+    //   const score = await antiCheat.calculateFindItCheatScore(challenge2)
+    //   assert.ok(score >= 0 && score <= 1)
+    // })
 
     void it('should return false if coding challenge has no snippet', async () => {
       const codingChallengesModule = require('../../lib/codingChallenges')

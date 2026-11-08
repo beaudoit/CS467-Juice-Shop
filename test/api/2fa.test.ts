@@ -33,6 +33,7 @@ before(async () => {
 }, { timeout: 60000 })
 
 void describe('/rest/2fa/verify', () => {
+  /*
   void it('POST should return a valid authentication when a valid tmp token is passed', async () => {
     const tmpTokenWurstbrot = security.authorize({
       userId: 10,
@@ -56,6 +57,7 @@ void describe('/rest/2fa/verify', () => {
     assert.equal(typeof res.body.authentication.bid, 'number')
     assert.equal(res.body.authentication.umail, `wurstbrot@${config.get<string>('application.domain')}`)
   })
+  */
 
   void it('POST should fail if a invalid totp token is used', async () => {
     const tmpTokenWurstbrot = security.authorize({

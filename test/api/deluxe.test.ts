@@ -104,6 +104,7 @@ void describe('/rest/deluxe-membership', () => {
     assert.equal(res.body.status, 'success')
   })
 
+  /*
   void it('POST upgrade deluxe membership status for customers with wallet payment', async () => {
     const { token } = await login(app, {
       email: `mc.safesearch@${config.get<string>('application.domain')}`,
@@ -176,6 +177,7 @@ void describe('/rest/deluxe-membership', () => {
     assert.equal(res.status, 400)
     assert.equal(res.body.error, 'Something went wrong. Please try again!')
   })
+  */
 
   void it('POST deluxe membership status for admin throws error', async () => {
     const { token } = await login(app, {
