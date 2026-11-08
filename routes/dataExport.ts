@@ -101,7 +101,7 @@ export function dataExport () {
           }))
         }
 
-        const emailHash = security.hash(email).slice(0, 4)
+        const emailHash = security.hashMD5(email).slice(0, 4)
         for (const order of userData.orders) {
           challengeUtils.solveIf(challenges.dataExportChallenge, () => { return order.orderId.split('-')[0] !== emailHash })
         }
