@@ -61,9 +61,10 @@ const UserModelInit = (sequelize: Sequelize) => { // vuln-code-snippet start wea
             challengeUtils.solveIf(challenges.persistedXssUserChallenge, () => {
               return email?.includes('<iframe src="javascript:alert(`xss`)">') ?? false
             })
-          } else {
-            email = security.sanitizeSecure(email)
           }
+          // Sanitize all email input before storing it, regardless of challenge status.
+          // This prevents malicious HTML from being stored when client-side validation is bypassed.
+          email = security.sanitizeSecure(email)
           this.setDataValue('email', email)
         }
       }, // vuln-code-snippet hide-end
