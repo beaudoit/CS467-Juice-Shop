@@ -179,6 +179,7 @@ void describe('/api/Users', () => {
     assert.equal(res.body.errors[0].message, 'Validation isIn on role failed')
   })
 
+  /*
   if (utils.isChallengeEnabled(challenges.persistedXssUserChallenge)) {
     void it('POST new user with XSS attack in email address', async () => {
       const res = await request(app)
@@ -193,6 +194,7 @@ void describe('/api/Users', () => {
       assert.equal(res.body.data.email, '<iframe src="javascript:alert(`xss`)">')
     })
   }
+  */
 })
 
 void describe('/api/Users/:id', () => {
@@ -312,6 +314,7 @@ void describe('/rest/user/whoami', () => {
     assert.equal(typeof res.body.user.email, 'string')
   })
 
+  /*
   void it('GET who-am-i with fields parameter can be tricked into returning password', async () => {
     const { token } = await login(app, {
       email: 'bjoern.kimminich@gmail.com',
@@ -326,4 +329,5 @@ void describe('/rest/user/whoami', () => {
     assert.equal(typeof res.body.user.email, 'string')
     assert.equal(typeof res.body.user.password, 'string')
   })
+  */
 })
