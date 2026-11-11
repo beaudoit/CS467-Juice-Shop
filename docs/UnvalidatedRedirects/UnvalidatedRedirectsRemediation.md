@@ -108,7 +108,7 @@ We replaced it with a function that parses the requested URL and compares its or
 
 We also added a regression test in `test/server/insecurity.unit.test.ts` to make sure a URL containing an approved address could not bypass the validation again.
 
-Commit: [Add GitHub commit link after pushing changes]
+Commit: https://github.com/beaudoit/CS467-Juice-Shop/commit/cbb0560ce
 
 ## Verification of Fix
 
