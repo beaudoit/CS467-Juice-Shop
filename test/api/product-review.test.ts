@@ -7,17 +7,17 @@ import { describe, it, before } from 'node:test'
 import assert from 'node:assert/strict'
 import request from 'supertest'
 import type { Express } from 'express'
-import config from 'config'
+// import config from 'config'
 import { createTestApp } from './helpers/setup'
 import { login } from './helpers/auth'
-import { type Product } from '../../data/types'
-import { challenges } from '../../data/datacache'
-import * as db from '../../data/mongodb'
-import * as security from '../../lib/insecurity'
+// import { type Product } from '../../data/types'
+// import { challenges } from '../../data/datacache'
+// import * as db from '../../data/mongodb'
+// import * as security from '../../lib/insecurity'
 
 let app: Express
 
-const authHeader = { Authorization: `Bearer ${security.authorize()}`, 'content-type': 'application/json' }
+// const authHeader = { Authorization: `Bearer ${security.authorize()}`, 'content-type': 'application/json' }
 
 before(async () => {
   const result = await createTestApp()
@@ -64,14 +64,14 @@ void describe('/rest/products/:id/reviews', () => {
 
 void describe('/rest/products/reviews', () => {
   let reviewId: string
-  let reviewAuthor: string
+  // let reviewAuthor: string
 
   before(async () => {
     const res = await request(app)
       .get('/rest/products/1/reviews')
     const response = res.body
     reviewId = response.data[0]._id
-    reviewAuthor = response.data[0].author
+    // reviewAuthor = response.data[0].author
   })
 
   // void it('PATCH single product review can be edited', async () => {
