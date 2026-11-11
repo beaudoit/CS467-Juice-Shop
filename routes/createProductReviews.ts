@@ -14,16 +14,15 @@ import * as utils from '../lib/utils'
 export function createProductReviews () {
   return async (req: Request, res: Response) => {
     const user = security.authenticatedUsers.from(req)
-    challengeUtils.solveIf(
-      challenges.forgedReviewChallenge,
-      () => user?.data?.email !== req.body.author
-    )
-
+    // rejects a request with no valid identity before DB access
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' })
+    }
     try {
       await reviewsCollection.insert({
         product: req.params.id,
         message: req.body.message,
-        author: req.body.author,
+        author: user.data.email, // identity comes from token
         likesCount: 0,
         likedBy: []
       })
