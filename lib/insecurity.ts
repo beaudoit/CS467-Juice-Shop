@@ -14,6 +14,7 @@ import jws from 'jws'
 import sanitizeHtmlLib from 'sanitize-html'
 import sanitizeFilenameLib from 'sanitize-filename'
 import * as utils from './utils'
+import { URL } from 'node:url'
 
 // @ts-expect-error FIXME no typescript definitions for z85 :(
 import * as z85 from 'z85'
@@ -148,9 +149,23 @@ export const redirectAllowlist = new Set([
 ])
 
 export const isRedirectAllowed = (url: string) => {
+  let destination: URL
+
+  try {
+    destination = new URL(url)
+  } catch {
+    return false
+  }
+
   let allowed = false
   for (const allowedUrl of redirectAllowlist) {
-    allowed = allowed || url.includes(allowedUrl) // vuln-code-snippet vuln-line redirectChallenge
+    const approved = new URL(allowedUrl)
+    const sameOrigin = destination.origin === approved.origin
+    const samePath = destination.pathname === approved.pathname
+    const validSubpath = destination.pathname.startsWith(
+      approved.pathname.replace(/\/$/, '') + '/'
+    )
+    allowed = allowed || (sameOrigin && (samePath || validSubpath))
   }
   return allowed
 }
