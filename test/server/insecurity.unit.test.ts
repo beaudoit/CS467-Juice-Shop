@@ -263,6 +263,11 @@ void describe('insecurity', () => {
       assert.equal(security.isRedirectAllowed('https://google.com'), false)
       assert.equal(security.isRedirectAllowed('https://owasp.org'), false)
     })
+
+    void it('rejects URLs that embed an allowed URL', () => {
+      const maliciousUrl = 'https://example.com/?next=https://github.com/juice-shop/juice-shop'
+      assert.equal(security.isRedirectAllowed(maliciousUrl), false)
+    })
   })
 
   void describe('sanitizeFilename', () => {
