@@ -62,7 +62,7 @@ The addresses removed were for `Bitcoin (blockchain.info)`, `Dash (explorer.dash
 
 After saving the changes, I rebuilt the Docker image and restarted the modified version of Juice Shop on localhost port 3001. This allowed me to test the updated application while keeping the original vulnerable version running on port 3000 for comparison.
 
-Commit: [Add link]
+Commit: https://github.com/beaudoit/CS467-Juice-Shop/commit/9a8ee2cf3
 
 ![Updated Redirect Allowlist with Outdated Cryptocurrency URLs Removed](FixedAllowlistCode.png)
 
