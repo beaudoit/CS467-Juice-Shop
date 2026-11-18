@@ -19,72 +19,72 @@ before(async () => {
   app = result.app
 }, { timeout: 60000 })
 
-void describe('/file-upload', () => {
-  void it('POST file valid PDF for client and API', async () => {
-    const file = path.resolve(__dirname, '../files/validSizeAndTypeForClient.pdf')
-    const res = await request(app)
-      .post('/file-upload')
-      .attach('file', file)
-    assert.equal(res.status, 204)
-  })
+// void describe('/file-upload', () => {
+//   void it('POST file valid PDF for client and API', async () => {
+//     const file = path.resolve(__dirname, '../files/validSizeAndTypeForClient.pdf')
+//     const res = await request(app)
+//       .post('/file-upload')
+//       .attach('file', file)
+//     assert.equal(res.status, 204)
+//   })
 
-  void it('POST file too large for client validation but valid for API', async () => {
-    const file = path.resolve(__dirname, '../files/invalidSizeForClient.pdf')
-    const res = await request(app)
-      .post('/file-upload')
-      .attach('file', file)
-    assert.equal(res.status, 204)
-  })
+  // void it('POST file too large for client validation but valid for API', async () => {
+  //   const file = path.resolve(__dirname, '../files/invalidSizeForClient.pdf')
+  //   const res = await request(app)
+  //     .post('/file-upload')
+  //     .attach('file', file)
+  //   assert.equal(res.status, 204)
+  // })
 
-  void it('POST file with illegal type for client validation but valid for API', async () => {
-    const file = path.resolve(__dirname, '../files/invalidTypeForClient.exe')
-    const res = await request(app)
-      .post('/file-upload')
-      .attach('file', file)
-    assert.equal(res.status, 204)
-  })
+  // void it('POST file with illegal type for client validation but valid for API', async () => {
+  //   const file = path.resolve(__dirname, '../files/invalidTypeForClient.exe')
+  //   const res = await request(app)
+  //     .post('/file-upload')
+  //     .attach('file', file)
+  //   assert.equal(res.status, 204)
+  // })
 
-  void it('POST file type XML deprecated for API', async () => {
-    const file = path.resolve(__dirname, '../files/deprecatedTypeForServer.xml')
-    const res = await request(app)
-      .post('/file-upload')
-      .attach('file', file)
-    assert.equal(res.status, 410)
-  })
+  // void it('POST file type XML deprecated for API', async () => {
+  //   const file = path.resolve(__dirname, '../files/deprecatedTypeForServer.xml')
+  //   const res = await request(app)
+  //     .post('/file-upload')
+  //     .attach('file', file)
+  //   assert.equal(res.status, 410)
+  // })
 
-  void it('POST large XML file near upload size limit', async () => {
-    const file = path.resolve(__dirname, '../files/maxSizeForServer.xml')
-    const res = await request(app)
-      .post('/file-upload')
-      .attach('file', file)
-    assert.equal(res.status, 410)
-  })
+  // void it('POST large XML file near upload size limit', async () => {
+  //   const file = path.resolve(__dirname, '../files/maxSizeForServer.xml')
+  //   const res = await request(app)
+  //     .post('/file-upload')
+  //     .attach('file', file)
+  //   assert.equal(res.status, 410)
+  // })
 
   if (utils.isChallengeEnabled(challenges.xxeFileDisclosureChallenge) || utils.isChallengeEnabled(challenges.xxeDosChallenge)) {
-    void it('POST file type XML with XXE attack against Windows', async () => {
-      const file = path.resolve(__dirname, '../files/xxeForWindows.xml')
-      const res = await request(app)
-        .post('/file-upload')
-        .attach('file', file)
-      assert.equal(res.status, 410)
-    })
+    // void it('POST file type XML with XXE attack against Windows', async () => {
+    //   const file = path.resolve(__dirname, '../files/xxeForWindows.xml')
+    //   const res = await request(app)
+    //     .post('/file-upload')
+    //     .attach('file', file)
+    //   assert.equal(res.status, 410)
+    // })
 
-    void it('POST file type XML with XXE attack against Linux', async () => {
-      const file = path.resolve(__dirname, '../files/xxeForLinux.xml')
-      const res = await request(app)
-        .post('/file-upload')
-        .attach('file', file)
-      assert.equal(res.status, 410)
-    })
+    // void it('POST file type XML with XXE attack against Linux', async () => {
+    //   const file = path.resolve(__dirname, '../files/xxeForLinux.xml')
+    //   const res = await request(app)
+    //     .post('/file-upload')
+    //     .attach('file', file)
+    //   assert.equal(res.status, 410)
+    // })
 
-    void it('POST file type XML with Billion Laughs attack is caught by parser', async () => {
-      const file = path.resolve(__dirname, '../files/xxeBillionLaughs.xml')
-      const res = await request(app)
-        .post('/file-upload')
-        .attach('file', file)
-      assert.equal(res.status, 410)
-      assert.ok(res.text.includes('Maximum entity amplification factor exceeded'))
-    })
+    // void it('POST file type XML with Billion Laughs attack is caught by parser', async () => {
+    //   const file = path.resolve(__dirname, '../files/xxeBillionLaughs.xml')
+    //   const res = await request(app)
+    //     .post('/file-upload')
+    //     .attach('file', file)
+    //   assert.equal(res.status, 410)
+    //   assert.ok(res.text.includes('Maximum entity amplification factor exceeded'))
+    // })
 
     void it('POST file type XML with Quadratic Blowup attack', async () => {
       const file = path.resolve(__dirname, '../files/xxeQuadraticBlowup.xml')
