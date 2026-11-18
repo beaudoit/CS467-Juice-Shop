@@ -34,8 +34,12 @@ export function captchas () {
 
 export const verifyCaptcha = () => async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const captcha = await CaptchaModel.findOne({ where: { captchaId: req.body.captchaId } })
-    if ((captcha != null) && req.body.captcha === captcha.answer) {
+    // deletes captcha. returns 1 if deleted, 0 if not deleted
+    const deleted = await CaptchaModel.destroy({
+      where: { captchaId: req.body.captchaId, answer: req.body.captcha }
+    })
+    // successful delete indicates correct captcha
+    if (deleted === 1) {
       next()
     } else {
       res.status(401).send(res.__('Wrong answer to CAPTCHA. Please try again.'))
