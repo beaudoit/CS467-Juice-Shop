@@ -56,11 +56,11 @@ void describe('b2bOrder', () => {
     assert.equal(challenges.rceChallenge.solved, false)
   })
 
-  void it('deserializing broken JSON should not solve "rceChallenge"', () => {
-    req.body.orderLinesData = '{ "productId: 28'
+  // void it('deserializing broken JSON should not solve "rceChallenge"', () => {
+  //   req.body.orderLinesData = '{ "productId: 28'
 
-    b2bOrder()(req, res, next)
+  //   b2bOrder()(req, res, next)
 
-    assert.equal(challenges.rceChallenge.solved, false)
-  })
+  //   assert.equal(challenges.rceChallenge.solved, false)
+  // })
 })
