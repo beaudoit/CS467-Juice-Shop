@@ -19,7 +19,7 @@ before(async () => {
   app = result.app
 }, { timeout: 60000 })
 
-// void describe('/file-upload', () => {
+void describe('/file-upload', () => {
 //   void it('POST file valid PDF for client and API', async () => {
 //     const file = path.resolve(__dirname, '../files/validSizeAndTypeForClient.pdf')
 //     const res = await request(app)
