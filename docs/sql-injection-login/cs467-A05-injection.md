@@ -39,8 +39,8 @@ Use Burp Suite (free community edition) to attempt SQL injection with a list of 
 13. The results show every payload that worked to log in to Juice Shop.
 
 
-![The POST packet sent to the server with invalid login credentials that returned a 401 response.](images/invalid-credentials.png)
-![List of results from each payload](images/payload-results.png)
+![The POST packet sent to the server with invalid login credentials that returned a 401 response.](./fix-login-sqli/images/invalid-credentials.png)
+![List of results from each payload](./fix-login-sqli/images/payload-results.png)
 
 ### Explanation of the root cause
 
@@ -56,7 +56,7 @@ How the payload `' OR 1=1--` exploits this:
 - `--` comments out the rest of the statement, removing anything after it on that line. This removes the password check.
 
 
-![Vulnerable code in the login function](images/code-flaw.png)
+![Vulnerable code in the login function](./fix-login-sqli/images/code-flaw.png)
 
 
 ### How to fix this issue
@@ -71,9 +71,9 @@ Changed the login query in routes/login.ts from string concatenation to a parame
 
 Running the Burp Suite process against the rebuilt container on localhost:3001 returns 401 for injection payloads. Logging in with a registered account still returns 200 and an authentication token.
 
-![401 response with attempted SQL injection](images/fixed-injection-attempt.png)
+![401 response with attempted SQL injection](./fix-login-sqli/images/fixed-injection-attempt.png)
 
-![200 response with valid credentials and authentication token](images/valid-login.png)
+![200 response with valid credentials and authentication token](./fix-login-sqli/images/valid-login.png)
 
 ### Potential improvements
 
