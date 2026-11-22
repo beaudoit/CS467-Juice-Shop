@@ -1,0 +1,89 @@
+# Forged Review Vulnerability
+
+## Which Vulnerability was found?
+
+A01:Broken Access Control - Forged Review
+
+Access control is the process of ensuring that users may only act on their intended permissions. Broken access control is a failure within these systems where the application fails to enforce restrictions on what an authenticated user is allowed to do. In Juice Shop, the review endpoints trust a client-supplied identity instead of the authenticated session, which lets any logged in user post or edit a product review as another user. 
+
+## How to reproduce the vulnerability
+
+I was able to find two vectors to exploit the broken access control vulnerability; creating a review as another user and editing another user’s review.
+Creating a review as another user:
+
+- Log in as any user.
+- Post a product review while intercepting traffic in Burp Suite (free community edition).
+- Open Burp, navigate to the Proxy tab, open a Burp browser instance, and navigate to localhost:3000 (or whichever port Juice Shop is running on).
+- Submit a review on any product and find the POST /rest/products/{id}/reviews request in HTTP history.
+- Right click the request and select ‘Send to Repeater’.
+- In Repeater, change the author field in the JSON body to another user’s email address.
+- Send the request. The new review is accepted and attributed to the other user, not you.
+
+Editing an existing review:
+
+- Retrieve the reviews for a product with GET /rest/products/{id}/reviews. The JSON response exposes each review’s _id and author.
+- Copy the _id of a review that belongs to a different user.
+- In Repeater, craft a PUT /rest/products/{id}/reviews request with that foreign _id and a new message.
+- Send the request. The edit succeeds on a review you do not own.
+
+## Explanation of the root cause
+
+Code in routes/createProductReviews.ts and routes/updateProductReviews.ts is the root cause of this access control vulnerability. Both handlers derive the acting user’s identity from client-controlled input rather than pulling it from the authenticated session.
+
+How each is exploited:
+
+- In the create handler, the review’s author is taken directly from req.body.author. Because the client controls the request body, any value, including another user’s email, is accepted and stored as the author.
+- In the update handler, the query matches a review by req.body.id alone, with no check that the review belongs to the requesting user. Any valid review _id can be edited regardless of ownership.
+
+The authenticated user’s real identity is available server-side from the signed JWT (via security.authenticatedUsers.from(req)), but neither handler used it to constrain the operation.
+
+## How to fix this issue
+
+To prevent forged reviews, the acting user’s identity must come from the authenticated token and never from client-supplied input. This was chosen because the JSON Web Token (JWT) is signed and cannot be forged by the client, so it is the only trustworthy source of identity. For the create handler, the author is set from the token’s email instead of the request body. For the update handler, the query filters on both the review _id and the token’s email, so a user can only edit reviews they own. Both handlers reject requests that carry no valid token.
+
+## Fix process/implementation
+
+In createProductReviews.ts: added a condition that returns 401 when no authenticated user is present, and changed the inserted author from req.body.author to user.data.email.
+In updateProductReviews.ts: added a condition that returns 401 for the no-user case, added author: user.data.email to the update filter so it only matches the caller’s own review, and added a check returning 401 when the update matches zero documents (review does not exist or is not owned by the caller).
+
+## Verification of fix
+
+I ran the Burp Suite process against the rebuilt Juice Shop container with the vulnerability fixed on localhost:3001:
+- Editing another user’s review (PUT with a foreign _id) returns 401 with the message “Not authorized to edit this review.”
+- Creating a review with another user’s email in the author field now stores the review under the authenticated user’s own email, taken from the token.
+- Posting and editing your own reviews with valid credentials still works normally.
+
+## Potential improvements
+
+This fix patches the two review endpoints. The next step would be finding other endpoints in the app that accept user-identifying fields (such as feedback) for the same type of flaw where the client blindly trusts user data and applying the same pattern to patch it. More broadly, establishing a shared authorization helper that derives identity from the token and checks resource ownership would prevent this class of bug from reappearing as new endpoints are added.
+
+
+## Screenshots
+
+![Server request with 200 response. carries information to forge reviews](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/info-for-forged-review.png)
+
+![PUT validating review author with user email](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/PUT-create-review.png)
+
+![Response from server showing review _id keys and values](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/review-id-key-value-pair.png)
+
+![Successful forged review using another users email](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/forged-review-wrong-email.png)
+
+![PATCH request and response from server showing JSON for edited review](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/PATCH-edit-review-JSON.png)
+
+![Result of attempting to forge a review after implemented fix](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/unsuccessful-forged-review.png)
+
+![Forged review edit using _id from another user review. Request to server and resulting response](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/forged-edit.png)
+
+![401 response when attempting to forge a review after fix implementation](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/401-unauthorized-edit.png)
+
+![updateProductReviews.ts update function fixed code](../broken-access-control-forged-review-and-edit/bac-forge-review-screenshots/fixed-code.png)
+
+
+## References
+OWASP Foundation, "A01:2025 Broken Access Control," OWASP Top 10:2025. [Online] Available: https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/
+
+OWASP Foundation, "Broken Access Control," OWASP Community. [Online] Available: https://community.owasp.org/Broken_Access_Control
+
+OWASP Foundation, "Authorization Cheat Sheet," OWASP Cheat Sheet Series. [Online] Available: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+
+PortSwigger, "Burp Suite Community Edition," PortSwigger Products. [Online] Available: https://portswigger.net/burp
