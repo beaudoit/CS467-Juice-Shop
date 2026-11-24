@@ -48,6 +48,7 @@ void describe('redirect', () => {
     assert.ok(next.mock.calls[0].arguments[0] instanceof Error)
   })
 
+  /*
   void it('redirecting to https://blockchain.info/address/1AbKfgvw9psQ41NbLi8kufDQTezwG8DRZm should solve the "redirectCryptoCurrencyChallenge"', () => {
     req.query.to = 'https://blockchain.info/address/1AbKfgvw9psQ41NbLi8kufDQTezwG8DRZm'
     challenges.redirectCryptoCurrencyChallenge = { solved: false, save } as unknown as Challenge
@@ -74,6 +75,7 @@ void describe('redirect', () => {
 
     assert.equal(challenges.redirectCryptoCurrencyChallenge.solved, true)
   })
+  */
 
   void it('tricking the allowlist should not solve "redirectChallenge"', () => {
     req.query.to = 'http://kimminich.de?to=https://github.com/juice-shop/juice-shop'

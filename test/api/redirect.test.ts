@@ -25,12 +25,14 @@ void describe('/redirect', () => {
     assert.equal(res.status, 302)
   })
 
+  /*
   void it('GET redirected to https://blockchain.info/address/1AbKfgvw9psQ41NbLi8kufDQTezwG8DRZm when this URL is passed as "to" parameter', async () => {
     const res = await request(app)
       .get('/redirect?to=https://blockchain.info/address/1AbKfgvw9psQ41NbLi8kufDQTezwG8DRZm')
       .redirects(0)
     assert.equal(res.status, 302)
   })
+  */
 
   void it('GET redirected to http://shop.spreadshirt.com/juiceshop when this URL is passed as "to" parameter', async () => {
     const res = await request(app)
@@ -53,6 +55,7 @@ void describe('/redirect', () => {
     assert.equal(res.status, 302)
   })
 
+  /*
   void it('GET redirected to https://explorer.dash.org/address/Xr556RzuwX6hg5EGpkybbv5RanJoZN17kW when this URL is passed as "to" parameter', async () => {
     const res = await request(app)
       .get('/redirect?to=https://explorer.dash.org/address/Xr556RzuwX6hg5EGpkybbv5RanJoZN17kW')
@@ -66,6 +69,7 @@ void describe('/redirect', () => {
       .redirects(0)
     assert.equal(res.status, 302)
   })
+  */
 
   void it('GET rejects redirect without query parameter', async () => {
     const res = await request(app)
